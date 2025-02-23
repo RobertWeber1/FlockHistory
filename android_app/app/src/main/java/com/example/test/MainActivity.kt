@@ -53,7 +53,7 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
         )
          Image(
               painter = painterResource(id = R.drawable.baseline_cake_24),
-              contentDescription = "Pupsen",
+              contentDescription = "Pupsen_branch",
               modifier = Modifier.width(100.dp)
 
 
