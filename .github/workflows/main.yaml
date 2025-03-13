@@ -12,7 +12,7 @@ jobs:
           distribution: "adopt-hotspot"
 
       - name: Run Android Tests
-        run: cd android && ./gradlew test
+        run: cd android_app && ./gradlew test
 
       - name: Run Android Build
         run: |-
