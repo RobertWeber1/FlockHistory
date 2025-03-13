@@ -178,20 +178,6 @@ class MainActivity : ComponentActivity() {
             return
         }
 
-        val bluetoothManager: BluetoothManager = getSystemService(BluetoothManager::class.java)
-        bluetoothAdapter = bluetoothManager.getAdapter()
-        if (bluetoothAdapter == null) {
-            Log.w(FH_TAG, "Device does not support bluetooth low energy")
-            return
-        }
-
-        if (bluetoothAdapter?.isEnabled == false) {
-            Log.w(FH_TAG, "Bluetooth is not enabled, starting intent to enable it")
-            val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
-            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT)
-            return
-        }
-
         Log.i(FH_TAG, "Checking bluetooth permissions")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             requestPermission(Manifest.permission.BLUETOOTH_SCAN)
@@ -199,6 +185,30 @@ class MainActivity : ComponentActivity() {
         } else {
             requestPermission(Manifest.permission.BLUETOOTH)
         }
+
+        val bluetoothManager: BluetoothManager = getSystemService(BluetoothManager::class.java)
+        bluetoothAdapter = bluetoothManager.adapter
+        if (bluetoothAdapter == null) {
+            Log.w(FH_TAG, "Device does not support bluetooth low energy")
+            return
+        }
+
+        if (bluetoothAdapter?.isEnabled == false) {
+            Log.w(FH_TAG, "Bluetooth is not enabled, starting intent to enable it")
+            if (ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.BLUETOOTH_CONNECT
+                ) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.BLUETOOTH
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+                startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT)
+            }
+            return
+        }
+
 
         startDeviceScan()
     }
