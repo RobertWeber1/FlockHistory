@@ -1,4 +1,4 @@
-package com.example.test.ui.theme
+package de.flock_history.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

@@ -1,4 +1,4 @@
-package com.example.test
+package de.flock_history.flock_history
 
 import org.junit.Test
 
