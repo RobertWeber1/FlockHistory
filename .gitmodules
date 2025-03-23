@@ -1,0 +1,15 @@
+[submodule "libs/tesseract"]
+	path = libs/tesseract
+	url = https://github.com/tesseract-ocr/tesseract.git
+[submodule "libs/leptonica"]
+	path = libs/leptonica
+	url = https://github.com/DanBloomberg/leptonica.git
+[submodule "libs/tessdata"]
+	path = libs/tessdata
+	url = https://github.com/tesseract-ocr/tessdata.git
+[submodule "libs/sqliteXX3"]
+	path = libs/sqliteXX3
+	url = https://github.com/RobertWeber1/sqliteXX3.git
+[submodule "libs/Catch2"]
+	path = libs/Catch2
+	url = https://github.com/catchorg/Catch2.git
