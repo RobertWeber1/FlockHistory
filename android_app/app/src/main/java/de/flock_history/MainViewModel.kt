@@ -33,7 +33,7 @@ enum class BluetoothDeviceType(val value: Int) {
 
 data class BleDevice(
     val address: String,
-    val name: String,
+    val name: String?,
     val type: BluetoothDeviceType,
 )
 

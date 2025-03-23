@@ -4,6 +4,8 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.ComponentCaller
 import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothGatt
+import android.bluetooth.BluetoothGattCallback
 import android.bluetooth.BluetoothManager
 import android.bluetooth.le.BluetoothLeScanner
 import android.bluetooth.le.ScanCallback
@@ -35,21 +37,6 @@ import de.flock_history.ui.theme.FlockHistoryTheme
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    FlockHistoryTheme {
-        Greeting("Android")
-    }
-}
 
 @Composable
 fun FlockHistory(bleDevices: Map<String, BleDevice>) {
@@ -78,7 +65,7 @@ class BLEScanner(
     private val onBleDeviceRemoved: (Map<String, BleDevice>) -> Unit,
 ) :
     ScanCallback() {
-    private val SCAN_PERIOD: Long = 10
+    private val SCAN_PERIOD_SECONDS: Long = 10
 
     private val executor = Executors.newScheduledThreadPool(1)
     private var context: Context? = null
@@ -95,17 +82,41 @@ class BLEScanner(
             return
         }
 
-        Log.i(FH_TAG, "Starting bluetooth LE scan")
+        Log.i(FH_TAG, "Starting Bluetooth LE scan")
 
         scanner?.startScan(this)
         executor.schedule({
             scanning = false
             scanner?.stopScan(this)
-        }, SCAN_PERIOD, TimeUnit.SECONDS)
+            Log.i(FH_TAG, "Stopped Bluetooth LE scan")
+        }, SCAN_PERIOD_SECONDS, TimeUnit.SECONDS)
     }
 
     override fun onScanFailed(errorCode: Int) {
         Log.e(FH_TAG, "BLE Device scan failed: $errorCode")
+    }
+
+    private fun checkBluetoothPermission(): Boolean {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (ActivityCompat.checkSelfPermission(
+                    context!!,
+                    Manifest.permission.BLUETOOTH_CONNECT
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                Log.e(FH_TAG, "Bluetooth connect permission not granted")
+                return true
+            }
+        } else {
+            if (ActivityCompat.checkSelfPermission(
+                    context!!,
+                    Manifest.permission.BLUETOOTH
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                Log.e(FH_TAG, "Bluetooth permission not granted")
+                return true
+            }
+        }
+        return false
     }
 
     override fun onScanResult(callbackType: Int, result: ScanResult?) {
@@ -114,33 +125,50 @@ class BLEScanner(
             return
         }
 
-        processScanResults(listOf(result))
-    }
-
-    private fun processScanResults(results: List<ScanResult>) {
-        if (ActivityCompat.checkSelfPermission(
-                context!!,
-                Manifest.permission.BLUETOOTH_CONNECT
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            Log.e(FH_TAG, "Bluetooth connect permission not granted")
+        if (checkBluetoothPermission()) {
             return
         }
 
         val devices = LinkedHashMap<String, BleDevice>()
-        for (result in results) {
-            Log.i(FH_TAG, "Device found: ${result.device.address}")
 
-// TODO
-//            result.device.connectGatt(context, true, object : BluetoothGattCallback() {
-//            })
+        Log.i(FH_TAG, "Device found: ${result.device.address}")
 
-            devices[result.device.address] = BleDevice(
-                result.device.address,
-                result.device.name,
-                BluetoothDeviceType.fromInt(result.device.type)
-            )
-        }
+        result.device.connectGatt(context, true, object : BluetoothGattCallback() {
+            override fun onConnectionStateChange(gatt: BluetoothGatt?, status: Int, newState: Int) {
+                Log.i(FH_TAG, "Connection State Changed")
+                if (gatt == null) {
+                    return
+                }
+
+                if (checkBluetoothPermission()) {
+                    return
+                }
+
+                gatt.discoverServices()
+            }
+
+            override fun onServicesDiscovered(gatt: BluetoothGatt?, status: Int) {
+                Log.i(FH_TAG, "Services discovered")
+                if (gatt == null) {
+                    return
+                }
+
+                for (service in gatt.services) {
+                    Log.i(FH_TAG, "Found service ${service.type}")
+                }
+            }
+
+            override fun onServiceChanged(gatt: BluetoothGatt) {
+                Log.i(FH_TAG, "Service Changed")
+            }
+        })
+
+        devices[result.device.address] = BleDevice(
+            result.device.address,
+            result.device.name,
+            BluetoothDeviceType.fromInt(result.device.type)
+        )
+
         onBleDeviceAdded(devices)
     }
 }
@@ -184,6 +212,8 @@ class MainActivity : ComponentActivity() {
             requestPermission(Manifest.permission.BLUETOOTH_CONNECT)
         } else {
             requestPermission(Manifest.permission.BLUETOOTH)
+            Log.i(FH_TAG, "Checking location permission")
+            requestPermission(Manifest.permission.ACCESS_FINE_LOCATION);
         }
 
         val bluetoothManager: BluetoothManager = getSystemService(BluetoothManager::class.java)
