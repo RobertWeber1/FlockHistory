@@ -20,43 +20,49 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import de.flock_history.screens.HomeScreenWithViewModel
+import de.flock_history.screens.ScannerScreenWithViewModel
 import de.flock_history.ui.theme.FlockHistoryTheme
+import kotlinx.serialization.Serializable
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
+@Serializable
+object Home
+
+@Serializable
+object Scanner
 
 @Composable
-fun FlockHistory(bleDevices: Map<String, BleDevice>) {
-    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-        Column(Modifier.padding(innerPadding)) {
-            Text(text = "BLE Devices")
-            LazyColumn {
-                items(bleDevices.values.toList()) { bleDevice ->
-                    Text(text = "[${bleDevice.address} - ${bleDevice.type.short()}] ${bleDevice.name}")
-                }
+fun FlockHistoryApp() {
+    val navController = rememberNavController()
+    val viewModelStoreOwner = checkNotNull(LocalViewModelStoreOwner.current) {
+        "No ViewModelStoreOwner was provided via LocalViewModelStoreOwner"
+    }
+
+    NavHost(navController = navController, startDestination = Home) {
+        composable<Home> {
+            CompositionLocalProvider(
+                LocalViewModelStoreOwner provides viewModelStoreOwner
+            ) {
+                HomeScreenWithViewModel({ navController.navigate(route = Scanner) })
             }
         }
-    }
-}
-
-@Composable
-fun FlockHistoryThemed(viewModel: MainViewModel) {
-    val bleDevices = viewModel.bleDevices.observeAsState()
-    FlockHistoryTheme {
-        FlockHistory(bleDevices.value!!)
+        composable<Scanner> {
+            CompositionLocalProvider(
+                LocalViewModelStoreOwner provides viewModelStoreOwner
+            ) {
+                ScannerScreenWithViewModel({ navController.navigate(route = Home) })
+            }
+        }
     }
 }
 
@@ -196,7 +202,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            FlockHistoryThemed(viewModel)
+            FlockHistoryTheme {
+                FlockHistoryApp()
+            }
         }
 
         val bluetoothLEAvailable =

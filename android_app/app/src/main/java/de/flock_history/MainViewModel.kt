@@ -2,6 +2,7 @@ package de.flock_history
 
 import android.bluetooth.BluetoothDevice
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 
 enum class BluetoothDeviceType(val value: Int) {
     DEVICE_TYPE_UNKNOWN(0),
@@ -37,6 +38,6 @@ data class BleDevice(
     val type: BluetoothDeviceType,
 )
 
-class MainViewModel {
+class MainViewModel : ViewModel() {
     val bleDevices = MutableLiveData<Map<String, BleDevice>>(LinkedHashMap())
 }
