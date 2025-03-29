@@ -31,6 +31,7 @@ import androidx.navigation.compose.rememberNavController
 import de.flock_history.screens.EntryProcessScreenWithViewModel
 import de.flock_history.screens.HomeScreenWithViewModel
 import de.flock_history.screens.InventoryProcessScreenWithViewModel
+import de.flock_history.screens.MedicalTreatmentProcessScreenWithViewModel
 import de.flock_history.screens.ScannerScreenWithViewModel
 import de.flock_history.screens.SheepListScreenWithViewModel
 import de.flock_history.ui.theme.FlockHistoryTheme
@@ -52,6 +53,9 @@ object EntryProcess
 
 @Serializable
 object InventoryProcess
+
+@Serializable
+object MedicalTreatmentProcess
 
 @Composable
 fun FlockHistoryApp() {
@@ -98,6 +102,13 @@ fun FlockHistoryApp() {
                 LocalViewModelStoreOwner provides viewModelStoreOwner
             ) {
                 InventoryProcessScreenWithViewModel({ navController.popBackStack() })
+            }
+        }
+        composable<MedicalTreatmentProcess> {
+            CompositionLocalProvider(
+                LocalViewModelStoreOwner provides viewModelStoreOwner
+            ) {
+                MedicalTreatmentProcessScreenWithViewModel({ navController.popBackStack() })
             }
         }
     }

@@ -21,5 +21,13 @@
 
     <!-- Inventory Process -->
     <string name="inventory_process_title">Inventory Process</string>
+    <string name="inventory_process_tag_id">Tag ID</string>
     <string name="inventory_process_submit">Submit</string>
+
+    <!-- Medical Treatment Process -->
+    <string name="medical_treatment_process_title">Medical Treatment Process</string>
+    <string name="medical_treatment_process_tag_id">Tag ID</string>
+    <string name="medical_treatment_process_treatment_type">Treatment Type</string>
+    <string name="medical_treatment_process_notes">Notes</string>
+    <string name="medical_treatment_process_submit">Submit</string>
 </resources>
