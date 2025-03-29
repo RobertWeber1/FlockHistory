@@ -3,7 +3,10 @@ package de.flock_history.screens
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.clearText
 import androidx.compose.foundation.text.input.rememberTextFieldState
@@ -23,6 +26,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import de.flock_history.R
 import de.flock_history.ui.theme.FlockHistoryTheme
 
@@ -70,25 +75,42 @@ fun MedicalTreatmentProcessScreen(goBack: () -> Unit) {
     ) { innerPadding ->
         Column(Modifier.padding(innerPadding)) {
             TextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(5.dp),
                 state = tagIdState,
                 label = { Text(stringResource(R.string.medical_treatment_process_tag_id)) },
             )
             TextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(5.dp, 0.dp, 5.dp, 5.dp),
                 state = treatmentTypeState,
                 label = { Text(stringResource(R.string.medical_treatment_process_treatment_type)) },
             )
             TextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(5.dp, 0.dp, 5.dp, 5.dp),
                 state = notesState,
                 label = { Text(stringResource(R.string.medical_treatment_process_notes)) },
                 lineLimits = TextFieldLineLimits.MultiLine(5, 20),
             )
-            Button(onClick = {
-                tagIdState.clearText()
-            }) {
+            Button(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(100.dp)
+                    .padding(5.dp, 0.dp, 5.dp, 0.dp),
+                shape = RoundedCornerShape(5.dp, 5.dp, 5.dp, 5.dp),
+                onClick = {
+                    tagIdState.clearText()
+                },
+            ) {
                 Text(
                     stringResource(
                         R.string.medical_treatment_process_submit
-                    )
+                    ),
+                    fontSize = 20.sp,
                 )
             }
         }
