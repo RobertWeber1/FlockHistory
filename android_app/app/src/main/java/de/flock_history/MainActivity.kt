@@ -30,6 +30,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import de.flock_history.screens.EntryProcessScreenWithViewModel
 import de.flock_history.screens.HomeScreenWithViewModel
+import de.flock_history.screens.InventoryProcessScreenWithViewModel
 import de.flock_history.screens.ScannerScreenWithViewModel
 import de.flock_history.screens.SheepListScreenWithViewModel
 import de.flock_history.ui.theme.FlockHistoryTheme
@@ -44,10 +45,13 @@ object Home
 object Scanner
 
 @Serializable
+object SheepList
+
+@Serializable
 object EntryProcess
 
 @Serializable
-object SheepList
+object InventoryProcess
 
 @Composable
 fun FlockHistoryApp() {
@@ -75,6 +79,13 @@ fun FlockHistoryApp() {
                 ScannerScreenWithViewModel({ navController.popBackStack() })
             }
         }
+        composable<SheepList> {
+            CompositionLocalProvider(
+                LocalViewModelStoreOwner provides viewModelStoreOwner
+            ) {
+                SheepListScreenWithViewModel({ navController.popBackStack() })
+            }
+        }
         composable<EntryProcess> {
             CompositionLocalProvider(
                 LocalViewModelStoreOwner provides viewModelStoreOwner
@@ -82,11 +93,11 @@ fun FlockHistoryApp() {
                 EntryProcessScreenWithViewModel({ navController.popBackStack() })
             }
         }
-        composable<SheepList> {
+        composable<InventoryProcess> {
             CompositionLocalProvider(
                 LocalViewModelStoreOwner provides viewModelStoreOwner
             ) {
-                SheepListScreenWithViewModel({ navController.popBackStack() })
+                InventoryProcessScreenWithViewModel({ navController.popBackStack() })
             }
         }
     }

@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">Flock History</string>
+    <string name="back_btn">Go Back</string>
 
-    <!-- -->
+    <!-- Home -->
     <string name="home_scanner_btn">Scanners</string>
     <string name="home_entry_process_btn">Entry Process</string>
     <string name="home_sheep_list_btn">Sheep</string>
@@ -9,12 +10,16 @@
     <!-- Scanners -->
     <string name="scanner_title">Scanners</string>
 
+    <!-- Sheep List -->
+    <string name="sheep_list_title">Sheep</string>
+
     <!-- Entry Process -->
     <string name="entry_process_title">Entry Process</string>
     <string name="entry_process_tag_id">Tag ID</string>
     <string name="entry_process_geno_type">Genotype</string>
     <string name="entry_process_age_in_months">Age in Months</string>
 
-    <!-- Sheep List -->
-    <string name="sheep_list_title">Sheep</string>
+    <!-- Inventory Process -->
+    <string name="inventory_process_title">Inventory Process</string>
+    <string name="inventory_process_submit">Submit</string>
 </resources>

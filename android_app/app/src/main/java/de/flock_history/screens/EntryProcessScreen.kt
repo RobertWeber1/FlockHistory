@@ -86,7 +86,7 @@ fun EntryProcessScreen(
                     IconButton(onClick = goBack) {
                         Icon(
                             Icons.AutoMirrored.Filled.ArrowBack,
-                            "Back",
+                            stringResource(R.string.back_btn),
                             tint = MaterialTheme.colorScheme.onPrimary,
                         )
                     }
