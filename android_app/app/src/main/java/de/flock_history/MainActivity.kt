@@ -28,8 +28,10 @@ import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import de.flock_history.screens.EntryProcessScreenWithViewModel
 import de.flock_history.screens.HomeScreenWithViewModel
 import de.flock_history.screens.ScannerScreenWithViewModel
+import de.flock_history.screens.SheepListScreenWithViewModel
 import de.flock_history.ui.theme.FlockHistoryTheme
 import kotlinx.serialization.Serializable
 import java.util.concurrent.Executors
@@ -40,6 +42,12 @@ object Home
 
 @Serializable
 object Scanner
+
+@Serializable
+object EntryProcess
+
+@Serializable
+object SheepList
 
 @Composable
 fun FlockHistoryApp() {
@@ -53,14 +61,32 @@ fun FlockHistoryApp() {
             CompositionLocalProvider(
                 LocalViewModelStoreOwner provides viewModelStoreOwner
             ) {
-                HomeScreenWithViewModel({ navController.navigate(route = Scanner) })
+                HomeScreenWithViewModel(
+                    { navController.navigate(route = Scanner) },
+                    { navController.navigate(route = EntryProcess) },
+                    { navController.navigate(route = SheepList) },
+                )
             }
         }
         composable<Scanner> {
             CompositionLocalProvider(
                 LocalViewModelStoreOwner provides viewModelStoreOwner
             ) {
-                ScannerScreenWithViewModel({ navController.navigate(route = Home) })
+                ScannerScreenWithViewModel({ navController.popBackStack() })
+            }
+        }
+        composable<EntryProcess> {
+            CompositionLocalProvider(
+                LocalViewModelStoreOwner provides viewModelStoreOwner
+            ) {
+                EntryProcessScreenWithViewModel({ navController.popBackStack() })
+            }
+        }
+        composable<SheepList> {
+            CompositionLocalProvider(
+                LocalViewModelStoreOwner provides viewModelStoreOwner
+            ) {
+                SheepListScreenWithViewModel({ navController.popBackStack() })
             }
         }
     }

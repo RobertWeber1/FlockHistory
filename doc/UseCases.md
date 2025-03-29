@@ -1,7 +1,5 @@
 # Aktionen/Vorgänge
 
-
-
 1. Zutritt
 2. Bestandsaufnahme
 3. Behandlung
@@ -16,9 +14,9 @@
 6. Pension
 
 
-* weleche infos sind relevant
-* wie interagiert man mit der App
-* wie sind die Vorgänge -> welche Rolle spielt die App dabei
+* Welche infos sind relevant?
+* Wie interagiert man mit der App?
+* Wie sind die Vorgänge? -> Welche Rolle spielt die App dabei?
 
 ## Zutritt
 
@@ -37,6 +35,7 @@ Ablauf:
 	* alle Tiere werden gescannt um verluste zu erfassen
 
 ## Behandlung
+
 Infos: TagID, Timestamp, Behandlungsart (z.B. Wurmkur) als Freitextfeld, Feld für Bemerkungen
 Ablauf:
 	* Schaf wird behandelt
@@ -45,6 +44,7 @@ Ablauf:
 	* Prozess abschließen
 
 ## Nachwuchs
+
 Infos (Mutter): TagID, Timestamp, Lämmeranzahl, temporäre Nummer
 Infos (Lämmerpool pro Lammzeit): Timestamp (geburt)
 
@@ -59,6 +59,7 @@ TODO: Randfälle
 
 ## Abgang
 ### Einzeltiergekennzeichnet
+
 Infos: TagID, Timestamp, Grund (Freitextfeld mit Dropdown), Freitextfeld für Bemerkungen
 
 Ablauf:
@@ -67,6 +68,7 @@ Ablauf:
 	* Prozess abschließen
 
 ### Nicht Einzeltiergekennzeichnet
+
 Infos: Timestamp, Lämmerpool, Grund (Freitextfeld mit Dropdown), Freitextfeld für Bemerkungen
 
 Ablauf:
